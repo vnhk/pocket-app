@@ -29,6 +29,8 @@ public class Pocket implements AbstractBaseEntity<UUID>, PersistableTableData, E
     private LocalDateTime modificationDate;
     private LocalDateTime creationDate;
 
+    private Boolean deleted = false;
+
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "pocket")
     private Set<PocketItem> pocketItems;
 
@@ -59,7 +61,7 @@ public class Pocket implements AbstractBaseEntity<UUID>, PersistableTableData, E
 
     public Integer getPocketSize() {
         if(pocketItems != null) {
-            return pocketItems.size();
+            return Math.toIntExact(pocketItems.stream().filter(e -> !e.getDeleted()).count());
         }
 
         return 0;
@@ -101,5 +103,13 @@ public class Pocket implements AbstractBaseEntity<UUID>, PersistableTableData, E
 
     public void setPocketItems(Set<PocketItem> pocketItems) {
         this.pocketItems = pocketItems;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 }

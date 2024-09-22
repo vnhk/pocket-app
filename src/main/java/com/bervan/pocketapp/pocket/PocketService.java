@@ -3,6 +3,8 @@ package com.bervan.pocketapp.pocket;
 import com.bervan.common.service.BaseService;
 import com.bervan.core.model.BervanLogger;
 import com.bervan.ieentities.ExcelIEEntity;
+import com.bervan.pocketapp.pocketitem.PocketItem;
+import com.bervan.pocketapp.pocketitem.PocketItemService;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -13,11 +15,13 @@ import java.util.Set;
 @Service
 public class PocketService implements BaseService<Pocket> {
     private final PocketRepository repository;
+    private final PocketItemService pocketItemService;
     private final PocketHistoryRepository historyRepository;
     private final BervanLogger logger;
 
-    public PocketService(PocketRepository repository, PocketHistoryRepository historyRepository, BervanLogger logger) {
+    public PocketService(PocketRepository repository, PocketItemService pocketItemService, PocketHistoryRepository historyRepository, BervanLogger logger) {
         this.repository = repository;
+        this.pocketItemService = pocketItemService;
         this.historyRepository = historyRepository;
         this.logger = logger;
     }
@@ -37,13 +41,16 @@ public class PocketService implements BaseService<Pocket> {
     }
 
     public Optional<Pocket> loadByName(String pocketName) {
-        return repository.findByName(pocketName);
+        return repository.findByNameAndDeletedFalse(pocketName);
     }
-
 
     @Override
     public void delete(Pocket item) {
-        repository.delete(item);
+        item.setDeleted(true);
+        for (PocketItem pocketItem : item.getPocketItems()) {
+            pocketItemService.delete(pocketItem);
+        }
+        save(item);
     }
 
     public List<HistoryPocket> loadHistory() {

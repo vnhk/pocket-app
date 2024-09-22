@@ -35,12 +35,13 @@ public class PocketItemService implements BaseService<PocketItem> {
 
     @Override
     public Set<PocketItem> load() {
-        return new HashSet<>(repository.findAll());
+        return new HashSet<>(repository.findAllByDeletedFalse());
     }
 
     @Override
     public void delete(PocketItem item) {
-        repository.delete(item);
+        item.setDeleted(true);
+        repository.save(item);
     }
 
     public List<HistoryPocketItem> loadHistory() {

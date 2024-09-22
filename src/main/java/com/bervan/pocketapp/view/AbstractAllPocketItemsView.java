@@ -33,6 +33,7 @@ public abstract class AbstractAllPocketItemsView extends AbstractTableView<Pocke
         pocketSelector.addValueChangeListener(comboBoxStringComponentValueChangeEvent -> {
             UI.getCurrent().navigate(ROUTE_NAME, QueryParameters.of("pocket-name", comboBoxStringComponentValueChangeEvent.getValue()));
             this.loadData();
+            this.refreshData();
         });
 
         pageLayout.add(pocketSelector);

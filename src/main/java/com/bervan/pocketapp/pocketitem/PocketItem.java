@@ -32,10 +32,11 @@ public class PocketItem implements AbstractBaseEntity<UUID>, PersistableTableDat
     @JoinColumn(name = "pocket_id")
     private Pocket pocket;
 
+    private Boolean deleted = false;
     private LocalDateTime modificationDate;
     private LocalDateTime creationDate;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @HistoryCollection(historyClass = HistoryPocketItem.class)
     private Set<HistoryPocketItem> history = new HashSet<>();
 
@@ -104,5 +105,13 @@ public class PocketItem implements AbstractBaseEntity<UUID>, PersistableTableDat
 
     public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 }
