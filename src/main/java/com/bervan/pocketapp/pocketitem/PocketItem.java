@@ -26,7 +26,6 @@ public class PocketItem implements AbstractBaseEntity<UUID>, PersistableTableDat
     @VaadinTableColumn(internalName = "content", displayName = "Content")
     private String content;
     @NotNull
-    @VaadinTableColumn(internalName = "orderInPocket", displayName = "Order", inEditForm = false, inSaveForm = false)
     private Integer orderInPocket;
 
     @ManyToOne(fetch = FetchType.EAGER)
