@@ -68,6 +68,8 @@ public abstract class AbstractAllPocketItemsView extends AbstractTableView<Pocke
             return new HashSet<>();
         }
 
+        addButton.setVisible(true);
+
         pocketSelector.setEnabled(false);
         pocketSelector.setValue(pocketName);
         pocketSelector.setEnabled(true);
@@ -77,7 +79,10 @@ public abstract class AbstractAllPocketItemsView extends AbstractTableView<Pocke
 
     @Override
     protected PocketItem customizeSavingInCreateForm(PocketItem newItem) {
-        newItem.setPocket(pocketService.loadByName(pocketName).get());
+        Pocket pocket = pocketService.loadByName(pocketName).get();
+        int size = pocket.getPocketItems().size();
+        newItem.setPocket(pocket);
+        newItem.setOrderInPocket(size);
         return super.customizeSavingInCreateForm(newItem);
     }
 }
