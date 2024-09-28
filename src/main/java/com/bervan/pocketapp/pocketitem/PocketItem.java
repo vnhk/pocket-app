@@ -22,7 +22,6 @@ public class PocketItem implements AbstractBaseEntity<UUID>, PersistableTableDat
     @GeneratedValue
     private UUID id;
     @Lob
-    @Column(columnDefinition = "BLOB")
     @NotNull
     @VaadinTableColumn(internalName = "content", displayName = "Content")
     private String content;
