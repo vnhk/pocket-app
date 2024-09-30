@@ -47,8 +47,10 @@ public class PocketService implements BaseService<Pocket> {
     @Override
     public void delete(Pocket item) {
         item.setDeleted(true);
-        for (PocketItem pocketItem : item.getPocketItems()) {
-            pocketItemService.delete(pocketItem);
+        if (item.getPocketItems() != null) {
+            for (PocketItem pocketItem : item.getPocketItems()) {
+                pocketItemService.delete(pocketItem);
+            }
         }
         save(item);
     }
