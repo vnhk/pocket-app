@@ -108,6 +108,9 @@ public class PocketItem implements AbstractBaseEntity<UUID>, PersistableTableDat
     }
 
     public Boolean getDeleted() {
+        if (deleted == null) {
+            return false;
+        }
         return deleted;
     }
 
