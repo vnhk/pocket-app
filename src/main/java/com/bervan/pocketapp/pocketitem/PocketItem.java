@@ -9,6 +9,7 @@ import com.bervan.ieentities.ExcelIEEntity;
 import com.bervan.pocketapp.pocket.Pocket;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -21,10 +22,19 @@ public class PocketItem implements AbstractBaseEntity<UUID>, PersistableTableDat
     @Id
     @GeneratedValue
     private UUID id;
+
+    @NotNull
+    @VaadinTableColumn(internalName = "summary", displayName = "Summary")
+    @Size(max = 100)
+    private String summary;
+
     @Lob
     @NotNull
-    @VaadinTableColumn(internalName = "content", displayName = "Content")
+    @Size(max = 5000000)
+    @Column(columnDefinition = "MEDIUMTEXT")
+    @VaadinTableColumn(internalName = "content", displayName = "Content", isWysiwyg = true)
     private String content;
+
     @NotNull
     private Integer orderInPocket;
 
@@ -116,5 +126,13 @@ public class PocketItem implements AbstractBaseEntity<UUID>, PersistableTableDat
 
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 }

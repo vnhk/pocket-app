@@ -18,9 +18,10 @@ public class HistoryPocketItem implements AbstractBaseHistoryEntity<UUID>, Persi
     @GeneratedValue
     private UUID id;
     @HistoryField
-    private String content;
+    private String summary;
     @HistoryField
-    private Integer orderInPocket;
+    @Column(columnDefinition = "MEDIUMTEXT")
+    private String content;
     private LocalDateTime updateDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -70,11 +71,11 @@ public class HistoryPocketItem implements AbstractBaseHistoryEntity<UUID>, Persi
         this.pocketItem = pocketItem;
     }
 
-    public Integer getOrderInPocket() {
-        return orderInPocket;
+    public String getSummary() {
+        return summary;
     }
 
-    public void setOrderInPocket(Integer order) {
-        this.orderInPocket = order;
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 }
