@@ -37,7 +37,7 @@ public class PocketService implements BaseService<Pocket> {
 
     @Override
     public Set<Pocket> load() {
-        return new HashSet<>(repository.findAll());
+        return new HashSet<>(repository.findByDeletedFalse());
     }
 
     public Optional<Pocket> loadByName(String pocketName) {
