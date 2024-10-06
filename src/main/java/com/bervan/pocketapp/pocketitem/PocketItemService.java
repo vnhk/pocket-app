@@ -3,7 +3,9 @@ package com.bervan.pocketapp.pocketitem;
 import com.bervan.common.service.BaseService;
 import com.bervan.core.model.BervanLogger;
 import com.bervan.ieentities.ExcelIEEntity;
+import com.bervan.pocketapp.pocket.Pocket;
 import com.bervan.pocketapp.pocket.PocketRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -30,6 +32,15 @@ public class PocketItemService implements BaseService<PocketItem> {
     }
 
     public PocketItem save(PocketItem pocketItem) {
+        return repository.save(pocketItem);
+    }
+
+    @Transactional
+    public PocketItem save(PocketItem pocketItem, String pocketName) {
+        Pocket pocket = pocketRepository.findByNameAndDeletedFalse(pocketName).get();
+        pocketItem.setPocket(pocket);
+        pocketItem.setOrderInPocket(pocket.getPocketSize());
+        pocket.getPocketItems().add(pocketItem);
         return repository.save(pocketItem);
     }
 
