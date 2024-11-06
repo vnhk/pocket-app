@@ -13,7 +13,7 @@ public abstract class AbstractPocketView extends AbstractTableView<Pocket> {
     private final PocketService service;
 
     public AbstractPocketView(@Autowired PocketService service, BervanLogger log) {
-        super(new PocketAppPageLayout(ROUTE_NAME), service, "Pockets", log, Pocket.class);
+        super(new PocketAppPageLayout(ROUTE_NAME), service, log, Pocket.class);
         this.service = service;
         renderCommonComponents();
     }

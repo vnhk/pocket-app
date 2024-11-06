@@ -24,7 +24,7 @@ public abstract class AbstractAllPocketItemsView extends AbstractTableView<Pocke
     private ComboBox<String> pocketSelector;
 
     public AbstractAllPocketItemsView(PocketItemService itemService, PocketService pocketService, BervanLogger log) {
-        super(new PocketAppPageLayout(ROUTE_NAME), itemService, "Pocket Items", log, PocketItem.class);
+        super(new PocketAppPageLayout(ROUTE_NAME), itemService, log, PocketItem.class);
         this.pocketService = pocketService;
         this.itemService = itemService;
 

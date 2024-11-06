@@ -1,9 +1,8 @@
 package com.bervan.pocketapp.view;
 
-import com.bervan.common.AbstractPageLayout;
-import com.vaadin.flow.component.html.Hr;
+import com.bervan.common.MenuNavigationComponent;
 
-public final class PocketAppPageLayout extends AbstractPageLayout {
+public final class PocketAppPageLayout extends MenuNavigationComponent {
 
     public PocketAppPageLayout(String currentRouteName) {
         super(currentRouteName);
@@ -12,7 +11,6 @@ public final class PocketAppPageLayout extends AbstractPageLayout {
         addButton(menuButtonsRow, AbstractAllPocketItemsView.ROUTE_NAME, "Pocket Items");
 
         add(menuButtonsRow);
-        add(new Hr());
 
     }
 }
