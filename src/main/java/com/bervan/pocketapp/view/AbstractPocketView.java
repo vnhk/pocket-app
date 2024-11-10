@@ -8,7 +8,9 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public abstract class AbstractPocketView extends AbstractTableView<Pocket> {
+import java.util.UUID;
+
+public abstract class AbstractPocketView extends AbstractTableView<UUID, Pocket> {
     public static final String ROUTE_NAME = "pocket-app/pockets";
     private final PocketService service;
 

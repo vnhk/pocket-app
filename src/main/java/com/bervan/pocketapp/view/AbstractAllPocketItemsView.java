@@ -14,9 +14,10 @@ import com.vaadin.flow.router.QueryParameters;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
-public abstract class AbstractAllPocketItemsView extends AbstractTableView<PocketItem> {
+public abstract class AbstractAllPocketItemsView extends AbstractTableView<UUID, PocketItem> {
     public static final String ROUTE_NAME = "pocket-app/all-pocket-items";
     private String pocketName = "";
     private final PocketItemService itemService;

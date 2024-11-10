@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public interface PocketRepository extends BaseRepository<Pocket, UUID> {
-    Optional<Pocket> findByNameAndDeletedFalse(String name);
+    Optional<Pocket> findByNameAndDeletedFalseAndOwnerId(String name, UUID ownerId);
 
-    Set<Pocket> findByDeletedFalse();
+    Set<Pocket> findByDeletedFalseAndOwnerId(UUID ownerId);
 }

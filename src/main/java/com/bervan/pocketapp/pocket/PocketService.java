@@ -1,19 +1,18 @@
 package com.bervan.pocketapp.pocket;
 
+import com.bervan.common.service.AuthService;
 import com.bervan.common.service.BaseService;
 import com.bervan.core.model.BervanLogger;
 import com.bervan.ieentities.ExcelIEEntity;
 import com.bervan.pocketapp.pocketitem.PocketItem;
 import com.bervan.pocketapp.pocketitem.PocketItemService;
+import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
-public class PocketService implements BaseService<Pocket> {
+public class PocketService implements BaseService<UUID, Pocket> {
     private final PocketRepository repository;
     private final PocketItemService pocketItemService;
     private final PocketHistoryRepository historyRepository;
@@ -36,12 +35,13 @@ public class PocketService implements BaseService<Pocket> {
     }
 
     @Override
+    @PostFilter("filterObject.owner != null && filterObject.owner.getId().equals(T(com.bervan.common.service.AuthService).getLoggedUserId())")
     public Set<Pocket> load() {
-        return new HashSet<>(repository.findByDeletedFalse());
+        return new HashSet<>(repository.findByDeletedFalseAndOwnerId(AuthService.getLoggedUserId()));
     }
 
     public Optional<Pocket> loadByName(String pocketName) {
-        return repository.findByNameAndDeletedFalse(pocketName);
+        return repository.findByNameAndDeletedFalseAndOwnerId(pocketName, AuthService.getLoggedUserId());
     }
 
     @Override
@@ -55,6 +55,7 @@ public class PocketService implements BaseService<Pocket> {
         save(item);
     }
 
+    @PostFilter("filterObject.owner != null && filterObject.owner.getId().equals(T(com.bervan.common.service.AuthService).getLoggedUserId())")
     public List<HistoryPocket> loadHistory() {
         return historyRepository.findAll();
     }

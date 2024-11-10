@@ -9,8 +9,8 @@ import java.util.UUID;
 
 public interface PocketItemRepository extends BaseRepository<PocketItem, UUID> {
 
-    @Query("SELECT pi FROM PocketItem pi WHERE pi.pocket.name = :pocketName AND pi.deleted = false")
-    Set<PocketItem> findAllByPocketName(@Param("pocketName") String pocketName);
+    @Query("SELECT pi FROM PocketItem pi WHERE pi.pocket.name = :pocketName AND pi.deleted = false AND pi.owner.id = :ownerId")
+    Set<PocketItem> findAllByPocketNameAndOwnerId(@Param("pocketName") String pocketName, @Param("ownerId") UUID ownerId);
 
-    Set<PocketItem> findAllByDeletedFalse();
+    Set<PocketItem> findAllByDeletedFalseAndOwnerId(UUID ownerId);
 }
