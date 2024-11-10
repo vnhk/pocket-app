@@ -2,6 +2,7 @@ package com.bervan.pocketapp.pocket;
 
 import com.bervan.common.service.AuthService;
 import com.bervan.common.service.BaseService;
+import com.bervan.common.user.User;
 import com.bervan.core.model.BervanLogger;
 import com.bervan.ieentities.ExcelIEEntity;
 import com.bervan.pocketapp.pocketitem.PocketItem;
@@ -38,6 +39,10 @@ public class PocketService implements BaseService<UUID, Pocket> {
     @PostFilter("filterObject.owner != null && filterObject.owner.getId().equals(T(com.bervan.common.service.AuthService).getLoggedUserId())")
     public Set<Pocket> load() {
         return new HashSet<>(repository.findByDeletedFalseAndOwnerId(AuthService.getLoggedUserId()));
+    }
+
+    public Set<Pocket> loadForOwner(User user) {
+        return new HashSet<>(repository.findByDeletedFalseAndOwnerId(user.getId()));
     }
 
     public Optional<Pocket> loadByName(String pocketName) {
