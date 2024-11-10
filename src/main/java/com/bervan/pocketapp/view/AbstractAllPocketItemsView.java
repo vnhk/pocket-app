@@ -29,6 +29,8 @@ public abstract class AbstractAllPocketItemsView extends AbstractTableView<UUID,
         this.pocketService = pocketService;
         this.itemService = itemService;
 
+        addClassName("pocket-item-view");
+
         Set<String> pocketsName = pocketService.load().stream().map(Pocket::getName).collect(Collectors.toSet());
         pocketSelector = new ComboBox<>("Pockets", pocketsName);
         pocketSelector.addValueChangeListener(comboBoxStringComponentValueChangeEvent -> {
@@ -37,7 +39,7 @@ public abstract class AbstractAllPocketItemsView extends AbstractTableView<UUID,
             this.refreshData();
         });
 
-        pageLayout.add(pocketSelector);
+        contentLayout.add(pocketSelector);
 
         renderCommonComponents();
     }
