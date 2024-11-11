@@ -1,19 +1,14 @@
 package com.bervan.pocketapp.pocket;
 
+import com.bervan.common.model.BervanBaseEntity;
 import com.bervan.common.model.PersistableTableData;
 import com.bervan.common.model.VaadinTableColumn;
-import com.bervan.common.user.User;
-import com.bervan.history.model.AbstractBaseEntity;
 import com.bervan.history.model.HistoryCollection;
 import com.bervan.history.model.HistorySupported;
 import com.bervan.ieentities.ExcelIEEntity;
 import com.bervan.pocketapp.pocketitem.PocketItem;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import org.checkerframework.common.aliasing.qual.Unique;
-import org.hibernate.annotations.Filter;
-import org.hibernate.annotations.FilterDef;
-import org.hibernate.annotations.ParamDef;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -21,11 +16,12 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @HistorySupported
 @Table(
         uniqueConstraints = @UniqueConstraint(columnNames = {"name", "owner.id"})
 )
-public class Pocket implements AbstractBaseEntity<UUID>, PersistableTableData<UUID>, ExcelIEEntity<UUID> {
+public class Pocket extends BervanBaseEntity<UUID> implements PersistableTableData<UUID>, ExcelIEEntity<UUID> {
     @Id
     @GeneratedValue
     private UUID id;
@@ -37,18 +33,7 @@ public class Pocket implements AbstractBaseEntity<UUID>, PersistableTableData<UU
 
     private Boolean deleted = false;
 
-    @ManyToOne
-    private User owner;
 
-    @Override
-    public User getOwner() {
-        return owner;
-    }
-
-    @Override
-    public void setOwner(User user) {
-        this.owner = user;
-    }
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "pocket")
     private Set<PocketItem> pocketItems;

@@ -40,7 +40,7 @@ public class PocketItemService implements BaseService<UUID, PocketItem> {
 
     @Transactional
     public PocketItem save(PocketItem pocketItem, String pocketName) {
-        Pocket pocket = pocketRepository.findByNameAndDeletedFalseAndOwnerId(pocketName, AuthService.getLoggedUserId()).get();
+        Pocket pocket = pocketRepository.findByNameAndDeletedFalseAndOwnersId(pocketName, AuthService.getLoggedUserId()).get(0);
         pocketItem.setPocket(pocket);
         pocketItem.setOrderInPocket(pocket.getPocketSize());
         pocket.getPocketItems().add(pocketItem);
@@ -48,9 +48,9 @@ public class PocketItemService implements BaseService<UUID, PocketItem> {
     }
 
     @Override
-    @PostFilter("filterObject.owner != null && filterObject.owner.getId().equals(T(com.bervan.common.service.AuthService).getLoggedUserId())")
+    @PostFilter("(T(com.bervan.common.service.AuthService).hasAccess(filterObject.owners))")
     public Set<PocketItem> load() {
-        return new HashSet<>(repository.findAllByDeletedFalseAndOwnerId(AuthService.getLoggedUserId()));
+        return new HashSet<>(repository.findAllByDeletedFalseAndOwnersId(AuthService.getLoggedUserId()));
     }
 
     @Override
@@ -59,7 +59,7 @@ public class PocketItemService implements BaseService<UUID, PocketItem> {
         repository.save(item);
     }
 
-    @PostFilter("filterObject.owner != null && filterObject.owner.getId().equals(T(com.bervan.common.service.AuthService).getLoggedUserId())")
+    @PostFilter("(T(com.bervan.common.service.AuthService).hasAccess(filterObject.owners))")
     public List<HistoryPocketItem> loadHistory() {
         return historyRepository.findAll();
     }
@@ -72,8 +72,8 @@ public class PocketItemService implements BaseService<UUID, PocketItem> {
         }
     }
 
-    @PostFilter("filterObject.owner != null && filterObject.owner.getId().equals(T(com.bervan.common.service.AuthService).getLoggedUserId())")
+    @PostFilter("(T(com.bervan.common.service.AuthService).hasAccess(filterObject.owners))")
     public Set<PocketItem> loadByPocketName(String pocketName) {
-        return repository.findAllByPocketNameAndOwnerId(pocketName, AuthService.getLoggedUserId());
+        return repository.findAllByPocketNameAndOwnersId(pocketName, AuthService.getLoggedUserId());
     }
 }

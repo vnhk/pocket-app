@@ -10,7 +10,10 @@ import com.bervan.pocketapp.pocketitem.PocketItemService;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 @Service
 public class PocketService implements BaseService<UUID, Pocket> {
@@ -36,17 +39,18 @@ public class PocketService implements BaseService<UUID, Pocket> {
     }
 
     @Override
-    @PostFilter("filterObject.owner != null && filterObject.owner.getId().equals(T(com.bervan.common.service.AuthService).getLoggedUserId())")
+    @PostFilter("(T(com.bervan.common.service.AuthService).hasAccess(filterObject.owners))")
     public Set<Pocket> load() {
-        return new HashSet<>(repository.findByDeletedFalseAndOwnerId(AuthService.getLoggedUserId()));
+        return new HashSet<>(repository.findByDeletedFalseAndOwnersId(AuthService.getLoggedUserId()));
     }
 
     public Set<Pocket> loadForOwner(User user) {
-        return new HashSet<>(repository.findByDeletedFalseAndOwnerId(user.getId()));
+        return new HashSet<>(repository.findByDeletedFalseAndOwnersId(user.getId()));
     }
 
-    public Optional<Pocket> loadByName(String pocketName) {
-        return repository.findByNameAndDeletedFalseAndOwnerId(pocketName, AuthService.getLoggedUserId());
+    @PostFilter("(T(com.bervan.common.service.AuthService).hasAccess(filterObject.owners))")
+    public List<Pocket> loadByName(String pocketName) {
+        return repository.findByNameAndDeletedFalseAndOwnersId(pocketName, AuthService.getLoggedUserId());
     }
 
     @Override
@@ -60,7 +64,7 @@ public class PocketService implements BaseService<UUID, Pocket> {
         save(item);
     }
 
-    @PostFilter("filterObject.owner != null && filterObject.owner.getId().equals(T(com.bervan.common.service.AuthService).getLoggedUserId())")
+    @PostFilter("(T(com.bervan.common.service.AuthService).hasAccess(filterObject.owners))")
     public List<HistoryPocket> loadHistory() {
         return historyRepository.findAll();
     }

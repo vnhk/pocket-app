@@ -83,7 +83,7 @@ public abstract class AbstractAllPocketItemsView extends AbstractTableView<UUID,
 
     @Override
     protected PocketItem customizeSavingInCreateForm(PocketItem newItem) {
-        Pocket pocket = pocketService.loadByName(pocketName).get();
+        Pocket pocket = pocketService.loadByName(pocketName).get(0);
         int size = pocket.getPocketItems().size();
         newItem.setPocket(pocket);
         newItem.setOrderInPocket(size);
