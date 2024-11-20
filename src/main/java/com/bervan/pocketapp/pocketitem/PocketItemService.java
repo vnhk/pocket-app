@@ -47,6 +47,15 @@ public class PocketItemService implements BaseService<UUID, PocketItem> {
         return repository.save(pocketItem);
     }
 
+    @Transactional
+    public PocketItem save(PocketItem pocketItem, String pocketName, UUID ownerId) {
+        Pocket pocket = pocketRepository.findByNameAndDeletedFalseAndOwnersId(pocketName, ownerId).get(0);
+        pocketItem.setPocket(pocket);
+        pocketItem.setOrderInPocket(pocket.getPocketSize());
+        pocket.getPocketItems().add(pocketItem);
+        return repository.save(pocketItem);
+    }
+
     @Override
     @PostFilter("(T(com.bervan.common.service.AuthService).hasAccess(filterObject.owners))")
     public Set<PocketItem> load() {
