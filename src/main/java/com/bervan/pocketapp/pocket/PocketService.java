@@ -1,5 +1,10 @@
 package com.bervan.pocketapp.pocket;
 
+import com.bervan.common.search.SearchQueryOption;
+import com.bervan.common.search.SearchRequest;
+import com.bervan.common.search.SearchService;
+import com.bervan.common.search.model.SearchOperation;
+import com.bervan.common.search.model.SearchResponse;
 import com.bervan.common.service.AuthService;
 import com.bervan.common.service.BaseService;
 import com.bervan.common.user.User;
@@ -18,12 +23,14 @@ import java.util.UUID;
 @Service
 public class PocketService implements BaseService<UUID, Pocket> {
     private final PocketRepository repository;
+    private final SearchService searchService;
     private final PocketItemService pocketItemService;
     private final PocketHistoryRepository historyRepository;
     private final BervanLogger logger;
 
-    public PocketService(PocketRepository repository, PocketItemService pocketItemService, PocketHistoryRepository historyRepository, BervanLogger logger) {
+    public PocketService(PocketRepository repository, SearchService searchService, PocketItemService pocketItemService, PocketHistoryRepository historyRepository, BervanLogger logger) {
         this.repository = repository;
+        this.searchService = searchService;
         this.pocketItemService = pocketItemService;
         this.historyRepository = historyRepository;
         this.logger = logger;
@@ -39,9 +46,17 @@ public class PocketService implements BaseService<UUID, Pocket> {
     }
 
     @Override
-    @PostFilter("(T(com.bervan.common.service.AuthService).hasAccess(filterObject.owners))")
+//    @PostFilter("(T(com.bervan.common.service.AuthService).hasAccess(filterObject.owners))")
     public Set<Pocket> load() {
-        return new HashSet<>(repository.findByDeletedFalseAndOwnersId(AuthService.getLoggedUserId()));
+        SearchRequest searchRequest = new SearchRequest();
+        searchRequest.addDeletedFalseCriteria("G1", Pocket.class);
+        searchRequest.addOwnerAccessCriteria("G1", Pocket.class);
+        SearchQueryOption searchQueryOption = new SearchQueryOption();
+        searchQueryOption.setEntityToFind(Pocket.class);
+
+        SearchResponse<Pocket> searchResult = searchService.search(searchRequest, searchQueryOption);
+
+        return new HashSet<>(searchResult.getResultList());
     }
 
     public Set<Pocket> loadForOwner(User user) {
