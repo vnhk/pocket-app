@@ -1,5 +1,6 @@
 package com.bervan.pocketapp.pocketitem;
 
+import com.bervan.common.search.SearchService;
 import com.bervan.common.service.AuthService;
 import com.bervan.common.service.BaseService;
 import com.bervan.core.model.BervanLogger;
@@ -16,13 +17,15 @@ import java.util.Set;
 import java.util.UUID;
 
 @Service
-public class PocketItemService implements BaseService<UUID, PocketItem> {
+public class PocketItemService extends BaseService<UUID, PocketItem> {
     private final PocketRepository pocketRepository;
     private final PocketItemRepository repository;
     private final PocketItemHistoryRepository historyRepository;
     private final BervanLogger logger;
 
-    public PocketItemService(PocketRepository pocketRepository, PocketItemRepository repository, PocketItemHistoryRepository historyRepository, BervanLogger logger) {
+    public PocketItemService(PocketRepository pocketRepository, PocketItemRepository repository, PocketItemHistoryRepository historyRepository, BervanLogger logger,
+                             SearchService searchService) {
+        super(repository, searchService);
         this.pocketRepository = pocketRepository;
         this.repository = repository;
         this.historyRepository = historyRepository;
@@ -73,13 +76,6 @@ public class PocketItemService implements BaseService<UUID, PocketItem> {
         return historyRepository.findAll();
     }
 
-    public void saveIfValid(List<? extends ExcelIEEntity> objects) {
-        List<? extends ExcelIEEntity> list = objects.stream().filter(e -> e instanceof PocketItem).toList();
-        logger.debug("Filtered Pocket Items to be imported: " + list.size());
-        for (ExcelIEEntity excelIEEntity : list) {
-            repository.save(((PocketItem) excelIEEntity));
-        }
-    }
 
     @PostFilter("(T(com.bervan.common.service.AuthService).hasAccess(filterObject.owners))")
     public Set<PocketItem> loadByPocketName(String pocketName) {
