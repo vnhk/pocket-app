@@ -10,6 +10,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.router.QueryParameters;
+import org.springframework.data.domain.Pageable;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -31,12 +32,11 @@ public abstract class AbstractAllPocketItemsView extends AbstractTableView<UUID,
 
         addClassName("pocket-item-view");
 
-        Set<String> pocketsName = pocketService.load().stream().map(Pocket::getName).collect(Collectors.toSet());
+        Set<String> pocketsName = pocketService.load(Pageable.ofSize(10000)).stream().map(Pocket::getName).collect(Collectors.toSet());
         pocketSelector = new ComboBox<>("Pockets", pocketsName);
         pocketSelector.addValueChangeListener(comboBoxStringComponentValueChangeEvent -> {
             UI.getCurrent().navigate(ROUTE_NAME, QueryParameters.of("pocket-name", comboBoxStringComponentValueChangeEvent.getValue()));
             this.loadData();
-            this.refreshData();
         });
 
         contentLayout.add(pocketSelector);
@@ -51,8 +51,7 @@ public abstract class AbstractAllPocketItemsView extends AbstractTableView<UUID,
         return grid;
     }
 
-    @Override
-    protected Set<PocketItem> loadData() {
+    protected void loadData() {
         getUI().ifPresent(ui -> {
             QueryParameters queryParameters = ui.getInternals().getActiveViewLocation().getQueryParameters();
             Map<String, String> parameters = queryParameters.getParameters()
@@ -69,7 +68,7 @@ public abstract class AbstractAllPocketItemsView extends AbstractTableView<UUID,
 
         if (pocketName == null || pocketName.equals("")) {
             addButton.setVisible(false);
-            return new HashSet<>();
+            grid.setItems(new HashSet<>());
         }
 
         addButton.setVisible(true);
@@ -78,7 +77,7 @@ public abstract class AbstractAllPocketItemsView extends AbstractTableView<UUID,
         pocketSelector.setValue(pocketName);
         pocketSelector.setEnabled(true);
 
-        return itemService.loadByPocketName(pocketName);
+        grid.setItems(itemService.loadByPocketName(pocketName));
     }
 
     @Override

@@ -10,6 +10,7 @@ import com.bervan.common.user.User;
 import com.bervan.core.model.BervanLogger;
 import com.bervan.pocketapp.pocketitem.PocketItem;
 import com.bervan.pocketapp.pocketitem.PocketItemService;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.stereotype.Service;
 
@@ -45,8 +46,7 @@ public class PocketService extends BaseService<UUID, Pocket> {
     }
 
     @Override
-//    @PostFilter("(T(com.bervan.common.service.AuthService).hasAccess(filterObject.owners))")
-    public Set<Pocket> load() {
+    public Set<Pocket> load(Pageable pageable) {
         SearchRequest searchRequest = new SearchRequest();
         searchRequest.addDeletedFalseCriteria("G1", Pocket.class);
         searchRequest.addOwnerAccessCriteria("G1", Pocket.class);

@@ -4,14 +4,12 @@ import com.bervan.common.search.SearchService;
 import com.bervan.common.service.AuthService;
 import com.bervan.common.service.BaseService;
 import com.bervan.core.model.BervanLogger;
-import com.bervan.ieentities.ExcelIEEntity;
 import com.bervan.pocketapp.pocket.Pocket;
 import com.bervan.pocketapp.pocket.PocketRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -57,12 +55,6 @@ public class PocketItemService extends BaseService<UUID, PocketItem> {
         pocketItem.setOrderInPocket(pocket.getPocketSize());
         pocket.getPocketItems().add(pocketItem);
         return repository.save(pocketItem);
-    }
-
-    @Override
-    @PostFilter("(T(com.bervan.common.service.AuthService).hasAccess(filterObject.owners))")
-    public Set<PocketItem> load() {
-        return new HashSet<>(repository.findAllByDeletedFalseAndOwnersId(AuthService.getLoggedUserId()));
     }
 
     @Override
