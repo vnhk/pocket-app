@@ -37,6 +37,7 @@ public abstract class AbstractAllPocketItemsView extends AbstractTableView<UUID,
         pocketSelector.addValueChangeListener(comboBoxStringComponentValueChangeEvent -> {
             UI.getCurrent().navigate(ROUTE_NAME, QueryParameters.of("pocket-name", comboBoxStringComponentValueChangeEvent.getValue()));
             this.loadData();
+            this.refreshData();
         });
 
         contentLayout.add(pocketSelector);
@@ -51,7 +52,8 @@ public abstract class AbstractAllPocketItemsView extends AbstractTableView<UUID,
         return grid;
     }
 
-    protected void loadData() {
+    @Override
+    protected Set<PocketItem> loadData() {
         getUI().ifPresent(ui -> {
             QueryParameters queryParameters = ui.getInternals().getActiveViewLocation().getQueryParameters();
             Map<String, String> parameters = queryParameters.getParameters()
@@ -68,7 +70,7 @@ public abstract class AbstractAllPocketItemsView extends AbstractTableView<UUID,
 
         if (pocketName == null || pocketName.equals("")) {
             addButton.setVisible(false);
-            grid.setItems(new HashSet<>());
+            return new HashSet<>();
         }
 
         addButton.setVisible(true);
@@ -77,7 +79,7 @@ public abstract class AbstractAllPocketItemsView extends AbstractTableView<UUID,
         pocketSelector.setValue(pocketName);
         pocketSelector.setEnabled(true);
 
-        grid.setItems(itemService.loadByPocketName(pocketName));
+        return itemService.loadByPocketName(pocketName);
     }
 
     @Override
