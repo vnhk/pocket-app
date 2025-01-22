@@ -48,8 +48,8 @@ public class PocketService extends BaseService<UUID, Pocket> {
     @Override
     public Set<Pocket> load(Pageable pageable) {
         SearchRequest searchRequest = new SearchRequest();
-        searchRequest.addDeletedFalseCriteria("G1", Pocket.class);
-        searchRequest.addOwnerAccessCriteria("G1", Pocket.class);
+        searchRequest.addDeletedFalseCriteria(Pocket.class);
+        searchRequest.addOwnerAccessCriteria(Pocket.class);
         SearchQueryOption searchQueryOption = new SearchQueryOption();
         searchQueryOption.setEntityToFind(Pocket.class);
 
