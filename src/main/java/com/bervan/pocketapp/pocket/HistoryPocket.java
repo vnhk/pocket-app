@@ -7,6 +7,7 @@ import com.bervan.history.model.HistoryOwnerEntity;
 import com.bervan.history.model.HistorySupported;
 import com.bervan.ieentities.ExcelIEEntity;
 import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -19,7 +20,6 @@ public class HistoryPocket extends BervanHistoryEntity<UUID> implements Persista
     private String name;
     private LocalDateTime updateDate;
     @Id
-    @GeneratedValue
     private UUID id;
 
     @ManyToOne(fetch = FetchType.EAGER)

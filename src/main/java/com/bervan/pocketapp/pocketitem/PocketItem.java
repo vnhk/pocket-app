@@ -10,6 +10,7 @@ import com.bervan.pocketapp.pocket.Pocket;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -21,7 +22,6 @@ import java.util.UUID;
 @HistorySupported
 public class PocketItem extends BervanBaseEntity<UUID> implements PersistableTableData<UUID>, ExcelIEEntity<UUID> {
     @Id
-    @GeneratedValue
     private UUID id;
 
     @NotNull
