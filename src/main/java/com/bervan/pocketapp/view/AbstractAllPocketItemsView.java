@@ -32,7 +32,8 @@ public abstract class AbstractAllPocketItemsView extends AbstractTableView<UUID,
 
         addClassName("pocket-item-view");
 
-        Set<String> pocketsName = pocketService.load(Pageable.ofSize(10000)).stream().map(Pocket::getName).collect(Collectors.toSet());
+        Set<String> pocketsName = pocketService.load(Pageable.ofSize(10000))
+                .stream().map(Pocket::getName).collect(Collectors.toSet());
         pocketSelector = new ComboBox<>("Pockets", pocketsName);
         pocketSelector.addValueChangeListener(comboBoxStringComponentValueChangeEvent -> {
             UI.getCurrent().navigate(ROUTE_NAME, QueryParameters.of("pocket-name", comboBoxStringComponentValueChangeEvent.getValue()));
