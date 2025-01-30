@@ -9,7 +9,6 @@ import com.bervan.ieentities.ExcelIEEntity;
 import com.bervan.pocketapp.pocketitem.PocketItem;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -65,7 +64,7 @@ public class Pocket extends BervanBaseEntity<UUID> implements PersistableTableDa
 
     public Integer getPocketSize() {
         if(pocketItems != null) {
-            return Math.toIntExact(pocketItems.stream().filter(e -> !e.getDeleted()).count());
+            return Math.toIntExact(pocketItems.stream().filter(e -> !e.isDeleted()).count());
         }
 
         return 0;
@@ -109,7 +108,7 @@ public class Pocket extends BervanBaseEntity<UUID> implements PersistableTableDa
         this.pocketItems = pocketItems;
     }
 
-    public Boolean getDeleted() {
+    public Boolean isDeleted() {
         if (deleted == null) {
             return false;
         }

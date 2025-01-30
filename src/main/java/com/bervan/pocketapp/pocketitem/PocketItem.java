@@ -118,7 +118,7 @@ public class PocketItem extends BervanBaseEntity<UUID> implements PersistableTab
         this.creationDate = creationDate;
     }
 
-    public Boolean getDeleted() {
+    public Boolean isDeleted() {
         if (deleted == null) {
             return false;
         }
