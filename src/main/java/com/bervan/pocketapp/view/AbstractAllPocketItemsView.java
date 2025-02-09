@@ -12,10 +12,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.router.QueryParameters;
 import org.springframework.data.domain.Pageable;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class AbstractAllPocketItemsView extends AbstractTableView<UUID, PocketItem> {
@@ -54,7 +51,7 @@ public abstract class AbstractAllPocketItemsView extends AbstractTableView<UUID,
     }
 
     @Override
-    protected Set<PocketItem> loadData() {
+    protected List<PocketItem> loadData() {
         getUI().ifPresent(ui -> {
             QueryParameters queryParameters = ui.getInternals().getActiveViewLocation().getQueryParameters();
             Map<String, String> parameters = queryParameters.getParameters()
@@ -71,7 +68,7 @@ public abstract class AbstractAllPocketItemsView extends AbstractTableView<UUID,
 
         if (pocketName == null || pocketName.equals("")) {
             addButton.setVisible(false);
-            return new HashSet<>();
+            return new ArrayList<>();
         }
 
         addButton.setVisible(true);
@@ -80,7 +77,7 @@ public abstract class AbstractAllPocketItemsView extends AbstractTableView<UUID,
         pocketSelector.setValue(pocketName);
         pocketSelector.setEnabled(true);
 
-        return itemService.loadByPocketName(pocketName);
+        return itemService.loadByPocketName(pocketName).stream().toList();
     }
 
     @Override
