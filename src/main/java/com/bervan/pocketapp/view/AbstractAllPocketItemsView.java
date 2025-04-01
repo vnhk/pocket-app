@@ -52,6 +52,7 @@ public abstract class AbstractAllPocketItemsView extends AbstractTableView<UUID,
 
     @Override
     protected List<PocketItem> loadData() {
+        checkboxes = new ArrayList<>();
         getUI().ifPresent(ui -> {
             QueryParameters queryParameters = ui.getInternals().getActiveViewLocation().getQueryParameters();
             Map<String, String> parameters = queryParameters.getParameters()
