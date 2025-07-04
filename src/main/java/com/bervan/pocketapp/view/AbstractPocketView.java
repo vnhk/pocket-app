@@ -1,6 +1,6 @@
 package com.bervan.pocketapp.view;
 
-import com.bervan.common.AbstractTableView;
+import com.bervan.common.AbstractBervanTableView;
 import com.bervan.core.model.BervanLogger;
 import com.bervan.pocketapp.pocket.Pocket;
 import com.bervan.pocketapp.pocket.PocketService;
@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.UUID;
 
-public abstract class AbstractPocketView extends AbstractTableView<UUID, Pocket> {
+public abstract class AbstractPocketView extends AbstractBervanTableView<UUID, Pocket> {
     public static final String ROUTE_NAME = "pocket-app/pockets";
     private final PocketService service;
 

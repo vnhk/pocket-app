@@ -1,6 +1,6 @@
 package com.bervan.pocketapp.view;
 
-import com.bervan.common.AbstractTableView;
+import com.bervan.common.AbstractBervanTableView;
 import com.bervan.core.model.BervanLogger;
 import com.bervan.pocketapp.pocket.Pocket;
 import com.bervan.pocketapp.pocket.PocketService;
@@ -15,7 +15,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public abstract class AbstractAllPocketItemsView extends AbstractTableView<UUID, PocketItem> {
+public abstract class AbstractAllPocketItemsView extends AbstractBervanTableView<UUID, PocketItem> {
     public static final String ROUTE_NAME = "pocket-app/all-pocket-items";
     private String pocketName = "";
     private final PocketItemService itemService;

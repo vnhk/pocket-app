@@ -2,7 +2,7 @@ package com.bervan.pocketapp.pocketitem;
 
 import com.bervan.common.model.BervanBaseEntity;
 import com.bervan.common.model.PersistableTableData;
-import com.bervan.common.model.VaadinTableColumn;
+import com.bervan.common.model.VaadinBervanColumn;
 import com.bervan.history.model.HistoryCollection;
 import com.bervan.history.model.HistorySupported;
 import com.bervan.ieentities.ExcelIEEntity;
@@ -10,7 +10,6 @@ import com.bervan.pocketapp.pocket.Pocket;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -25,7 +24,7 @@ public class PocketItem extends BervanBaseEntity<UUID> implements PersistableTab
     private UUID id;
 
     @NotNull
-    @VaadinTableColumn(internalName = "summary", displayName = "Summary")
+    @VaadinBervanColumn(internalName = "summary", displayName = "Summary")
     @Size(max = 100)
     private String summary;
 
@@ -33,7 +32,7 @@ public class PocketItem extends BervanBaseEntity<UUID> implements PersistableTab
     @NotNull
     @Size(max = 5000000)
     @Column(columnDefinition = "MEDIUMTEXT")
-    @VaadinTableColumn(internalName = "content", displayName = "Content", isWysiwyg = true)
+    @VaadinBervanColumn(internalName = "content", displayName = "Content", isWysiwyg = true)
     private String content;
 
     @NotNull

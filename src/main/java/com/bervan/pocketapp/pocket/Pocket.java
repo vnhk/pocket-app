@@ -2,7 +2,7 @@ package com.bervan.pocketapp.pocket;
 
 import com.bervan.common.model.BervanBaseEntity;
 import com.bervan.common.model.PersistableTableData;
-import com.bervan.common.model.VaadinTableColumn;
+import com.bervan.common.model.VaadinBervanColumn;
 import com.bervan.history.model.HistoryCollection;
 import com.bervan.history.model.HistorySupported;
 import com.bervan.ieentities.ExcelIEEntity;
@@ -25,7 +25,7 @@ public class Pocket extends BervanBaseEntity<UUID> implements PersistableTableDa
     @Id
     private UUID id;
     @Size(max = 100)
-    @VaadinTableColumn(internalName = "name", displayName = "Name")
+    @VaadinBervanColumn(internalName = "name", displayName = "Name")
     private String name;
     private LocalDateTime modificationDate;
     private LocalDateTime creationDate;
