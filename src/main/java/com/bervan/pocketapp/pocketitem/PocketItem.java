@@ -53,6 +53,10 @@ public class PocketItem extends BervanBaseEntity<UUID> implements PersistableTab
     @HistoryCollection(historyClass = HistoryPocketItem.class)
     private Set<HistoryPocketItem> history = new HashSet<>();
 
+    public PocketItem() {
+
+    }
+
     public Integer getOrderInPocket() {
         return orderInPocket;
     }
@@ -69,14 +73,6 @@ public class PocketItem extends BervanBaseEntity<UUID> implements PersistableTab
         this.pocket = pocket;
     }
 
-    public PocketItem() {
-
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
     @Override
     public String getTableFilterableColumnValue() {
         return content;
@@ -84,6 +80,10 @@ public class PocketItem extends BervanBaseEntity<UUID> implements PersistableTab
 
     public UUID getId() {
         return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     @Override
@@ -140,6 +140,9 @@ public class PocketItem extends BervanBaseEntity<UUID> implements PersistableTab
     }
 
     public Boolean isEncrypted() {
+        if (encrypted == null) {
+            return false;
+        }
         return encrypted;
     }
 

@@ -32,6 +32,10 @@ public class PocketItemService extends BaseService<UUID, PocketItem> {
         this.encryptionService = encryptionService;
     }
 
+    public String decryptContent(PocketItem pocketItem, String password) {
+        return encryptionService.decrypt(pocketItem.getContent(), password);
+    }
+
     @Override
     public void save(List<PocketItem> data) {
         repository.saveAll(data);
