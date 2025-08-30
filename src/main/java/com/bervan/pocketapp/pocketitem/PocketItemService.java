@@ -3,7 +3,9 @@ package com.bervan.pocketapp.pocketitem;
 import com.bervan.common.search.SearchService;
 import com.bervan.common.service.AuthService;
 import com.bervan.common.service.BaseService;
-import com.bervan.core.model.BervanLogger;
+import com.bervan.common.user.User;
+import com.bervan.encryption.DataCipherException;
+import com.bervan.encryption.EncryptionService;
 import com.bervan.pocketapp.pocket.Pocket;
 import com.bervan.pocketapp.pocket.PocketRepository;
 import jakarta.transaction.Transactional;
@@ -19,15 +21,15 @@ public class PocketItemService extends BaseService<UUID, PocketItem> {
     private final PocketRepository pocketRepository;
     private final PocketItemRepository repository;
     private final PocketItemHistoryRepository historyRepository;
-    private final BervanLogger logger;
+    private final EncryptionService encryptionService;
 
-    public PocketItemService(PocketRepository pocketRepository, PocketItemRepository repository, PocketItemHistoryRepository historyRepository, BervanLogger logger,
-                             SearchService searchService) {
+    public PocketItemService(PocketRepository pocketRepository, PocketItemRepository repository, PocketItemHistoryRepository historyRepository,
+                             SearchService searchService, EncryptionService encryptionService) {
         super(repository, searchService);
         this.pocketRepository = pocketRepository;
         this.repository = repository;
         this.historyRepository = historyRepository;
-        this.logger = logger;
+        this.encryptionService = encryptionService;
     }
 
     @Override
@@ -36,7 +38,23 @@ public class PocketItemService extends BaseService<UUID, PocketItem> {
     }
 
     public PocketItem save(PocketItem pocketItem) {
+        if (pocketItem.isEncrypted()) {
+            encryptContent(pocketItem);
+        }
+
         return repository.save(pocketItem);
+    }
+
+    private void encryptContent(PocketItem pocketItem) {
+        if (!encryptionService.isEncrypted(pocketItem.getContent())) {
+            User user = AuthService.getLoggedUser().get();
+            String dataCipherPassword = user.getDataCipherPassword();
+            if (dataCipherPassword != null && !dataCipherPassword.isBlank()) {
+                pocketItem.setContent(encryptionService.encrypt(pocketItem.getContent(), dataCipherPassword));
+            } else {
+                throw new DataCipherException("User data cipher password is not present!");
+            }
+        }
     }
 
     @Transactional
@@ -45,7 +63,7 @@ public class PocketItemService extends BaseService<UUID, PocketItem> {
         pocketItem.setPocket(pocket);
         pocketItem.setOrderInPocket(pocket.getPocketSize());
         pocket.getPocketItems().add(pocketItem);
-        return repository.save(pocketItem);
+        return save(pocketItem);
     }
 
     @Transactional
@@ -54,7 +72,7 @@ public class PocketItemService extends BaseService<UUID, PocketItem> {
         pocketItem.setPocket(pocket);
         pocketItem.setOrderInPocket(pocket.getPocketSize());
         pocket.getPocketItems().add(pocketItem);
-        return repository.save(pocketItem);
+        return save(pocketItem);
     }
 
     @Override

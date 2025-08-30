@@ -24,7 +24,8 @@ public class HistoryPocketItem extends BervanHistoryEntity<UUID> implements Pers
     @Column(columnDefinition = "MEDIUMTEXT")
     private String content;
     private LocalDateTime updateDate;
-
+    @Column(name = "is_encrypted")
+    private Boolean encrypted = false;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @HistoryOwnerEntity
@@ -79,5 +80,13 @@ public class HistoryPocketItem extends BervanHistoryEntity<UUID> implements Pers
 
     public void setSummary(String summary) {
         this.summary = summary;
+    }
+
+    public Boolean getEncrypted() {
+        return encrypted;
+    }
+
+    public void setEncrypted(Boolean encrypted) {
+        this.encrypted = encrypted;
     }
 }

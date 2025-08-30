@@ -42,6 +42,9 @@ public class PocketItem extends BervanBaseEntity<UUID> implements PersistableTab
     @JoinColumn(name = "pocket_id")
     private Pocket pocket;
 
+    @Column(name = "is_encrypted")
+    private Boolean encrypted = false;
+
     private Boolean deleted = false;
     private LocalDateTime modificationDate;
     private LocalDateTime creationDate;
@@ -134,5 +137,13 @@ public class PocketItem extends BervanBaseEntity<UUID> implements PersistableTab
 
     public void setSummary(String summary) {
         this.summary = summary;
+    }
+
+    public Boolean isEncrypted() {
+        return encrypted;
+    }
+
+    public void setEncrypted(Boolean encrypted) {
+        this.encrypted = encrypted;
     }
 }
