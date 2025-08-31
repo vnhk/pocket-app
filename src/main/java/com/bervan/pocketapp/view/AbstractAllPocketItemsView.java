@@ -67,7 +67,7 @@ public abstract class AbstractAllPocketItemsView extends AbstractBervanTableView
             pocketName = parameters.getOrDefault("pocket-name", "");
         });
 
-        if (pocketName == null || pocketName.equals("")) {
+        if (pocketName == null || pocketName.isEmpty()) {
             addButton.setVisible(false);
             return new ArrayList<>();
         }
