@@ -1,6 +1,6 @@
 package com.bervan.pocketapp.view;
 
-import com.bervan.common.AbstractBervanTableView;
+import com.bervan.common.view.AbstractBervanTableView;
 import com.bervan.core.model.BervanLogger;
 import com.bervan.pocketapp.pocket.Pocket;
 import com.bervan.pocketapp.pocket.PocketService;
