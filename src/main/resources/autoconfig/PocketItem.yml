@@ -1,0 +1,21 @@
+columns:
+  - field: summary
+    displayName: "Summary"
+    internalName: "summary"
+    inSaveForm: true
+    inEditForm: true
+    inTable: true
+    required: true
+    min: 3
+    max: 100
+
+  - field: content
+    displayName: "Content"
+    internalName: "content"
+    inSaveForm: true
+    inEditForm: true
+    inTable: true
+    required: false
+    min: 0
+    max: 5000000
+    isWysiwyg: true
