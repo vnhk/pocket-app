@@ -1,5 +1,6 @@
 package com.bervan.pocketapp.view;
 
+import com.bervan.common.config.BervanViewConfig;
 import com.bervan.common.view.AbstractBervanTableView;
 import com.bervan.core.model.BervanLogger;
 import com.bervan.pocketapp.pocket.Pocket;
@@ -22,8 +23,8 @@ public abstract class AbstractAllPocketItemsView extends AbstractBervanTableView
     private final PocketService pocketService;
     private ComboBox<String> pocketSelector;
 
-    public AbstractAllPocketItemsView(PocketItemService itemService, PocketService pocketService, BervanLogger log) {
-        super(new PocketAppPageLayout(ROUTE_NAME), itemService, log, PocketItem .class);
+    public AbstractAllPocketItemsView(PocketItemService itemService, PocketService pocketService, BervanLogger log, BervanViewConfig bervanViewConfig) {
+        super(new PocketAppPageLayout(ROUTE_NAME), itemService, log, bervanViewConfig, PocketItem .class);
         this.pocketService = pocketService;
         this.itemService = itemService;
 

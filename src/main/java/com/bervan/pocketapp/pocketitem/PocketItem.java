@@ -2,7 +2,6 @@ package com.bervan.pocketapp.pocketitem;
 
 import com.bervan.common.model.BervanBaseEntity;
 import com.bervan.common.model.PersistableTableData;
-import com.bervan.common.model.VaadinBervanColumn;
 import com.bervan.history.model.HistoryCollection;
 import com.bervan.history.model.HistorySupported;
 import com.bervan.ieentities.ExcelIEEntity;
@@ -24,7 +23,6 @@ public class PocketItem extends BervanBaseEntity<UUID> implements PersistableTab
     private UUID id;
 
     @NotNull
-    @VaadinBervanColumn(internalName = "summary", displayName = "Summary")
     @Size(max = 100)
     private String summary;
 
@@ -32,7 +30,6 @@ public class PocketItem extends BervanBaseEntity<UUID> implements PersistableTab
     @NotNull
     @Size(max = 5000000)
     @Column(columnDefinition = "MEDIUMTEXT")
-    @VaadinBervanColumn(internalName = "content", displayName = "Content", isWysiwyg = true)
     private String content;
 
     @NotNull
