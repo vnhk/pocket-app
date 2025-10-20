@@ -82,11 +82,11 @@ public abstract class AbstractAllPocketItemsView extends AbstractBervanTableView
     }
 
     @Override
-    protected PocketItem customizeSavingInCreateForm(PocketItem newItem) {
+    protected PocketItem preSaveActions(PocketItem newItem) {
         Pocket pocket = pocketService.loadByName(pocketName).get(0);
         int size = pocket.getPocketItems().size();
         newItem.setPocket(pocket);
         newItem.setOrderInPocket(size);
-        return super.customizeSavingInCreateForm(newItem);
+        return super.preSaveActions(newItem);
     }
 }
