@@ -2,7 +2,6 @@ package com.bervan.pocketapp.view;
 
 import com.bervan.common.config.BervanViewConfig;
 import com.bervan.common.view.AbstractBervanTableView;
-import com.bervan.core.model.BervanLogger;
 import com.bervan.pocketapp.pocket.Pocket;
 import com.bervan.pocketapp.pocket.PocketService;
 import com.vaadin.flow.component.grid.Grid;
@@ -15,8 +14,8 @@ public abstract class AbstractPocketView extends AbstractBervanTableView<UUID, P
     public static final String ROUTE_NAME = "pocket-app/pockets";
     private final PocketService service;
 
-    public AbstractPocketView(@Autowired PocketService service, BervanLogger log, BervanViewConfig bervanViewConfig) {
-        super(new PocketAppPageLayout(ROUTE_NAME), service, log, bervanViewConfig, Pocket.class);
+    public AbstractPocketView(@Autowired PocketService service, BervanViewConfig bervanViewConfig) {
+        super(new PocketAppPageLayout(ROUTE_NAME), service, bervanViewConfig, Pocket.class);
         this.service = service;
         renderCommonComponents();
     }

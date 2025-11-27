@@ -7,7 +7,6 @@ import com.bervan.common.search.model.SearchResponse;
 import com.bervan.common.service.AuthService;
 import com.bervan.common.service.BaseService;
 import com.bervan.common.user.User;
-import com.bervan.core.model.BervanLogger;
 import com.bervan.pocketapp.pocketitem.PocketItem;
 import com.bervan.pocketapp.pocketitem.PocketItemService;
 import org.springframework.data.domain.Pageable;
@@ -25,15 +24,13 @@ public class PocketService extends BaseService<UUID, Pocket> {
     private final SearchService searchService;
     private final PocketItemService pocketItemService;
     private final PocketHistoryRepository historyRepository;
-    private final BervanLogger logger;
 
-    public PocketService(PocketRepository repository, SearchService searchService, PocketItemService pocketItemService, PocketHistoryRepository historyRepository, BervanLogger logger) {
+    public PocketService(PocketRepository repository, SearchService searchService, PocketItemService pocketItemService, PocketHistoryRepository historyRepository) {
         super(repository, searchService);
         this.repository = repository;
         this.searchService = searchService;
         this.pocketItemService = pocketItemService;
         this.historyRepository = historyRepository;
-        this.logger = logger;
     }
 
     @Override
