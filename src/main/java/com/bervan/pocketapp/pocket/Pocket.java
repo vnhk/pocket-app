@@ -1,7 +1,7 @@
 package com.bervan.pocketapp.pocket;
 
-import com.bervan.common.model.BervanBaseEntity;
-import com.bervan.common.model.PersistableTableData;
+import com.bervan.common.model.BervanOwnedBaseEntity;
+import com.bervan.common.model.PersistableTableOwnedData;
 
 import com.bervan.history.model.HistoryCollection;
 import com.bervan.history.model.HistorySupported;
@@ -21,7 +21,7 @@ import java.util.UUID;
 @Table(
         uniqueConstraints = @UniqueConstraint(columnNames = {"name", "owner.id"})
 )
-public class Pocket extends BervanBaseEntity<UUID> implements PersistableTableData<UUID>, ExcelIEEntity<UUID> {
+public class Pocket extends BervanOwnedBaseEntity<UUID> implements PersistableTableOwnedData<UUID>, ExcelIEEntity<UUID> {
     @Id
     private UUID id;
     @Size(max = 100)
