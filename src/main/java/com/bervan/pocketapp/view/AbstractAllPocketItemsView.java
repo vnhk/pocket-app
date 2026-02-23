@@ -2,6 +2,7 @@ package com.bervan.pocketapp.view;
 
 import com.bervan.common.config.BervanViewConfig;
 import com.bervan.common.view.AbstractBervanTableView;
+import com.bervan.logging.JsonLogger;
 import com.bervan.pocketapp.pocket.Pocket;
 import com.bervan.pocketapp.pocket.PocketService;
 import com.bervan.pocketapp.pocketitem.PocketItem;
@@ -17,13 +18,14 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractAllPocketItemsView extends AbstractBervanTableView<UUID, PocketItem> {
     public static final String ROUTE_NAME = "pocket-app/all-pocket-items";
-    private String pocketName = "";
+    private static JsonLogger logger = JsonLogger.getLogger(AbstractAllPocketItemsView.class, "pocket");
     private final PocketItemService itemService;
     private final PocketService pocketService;
+    private String pocketName = "";
     private ComboBox<String> pocketSelector;
 
     public AbstractAllPocketItemsView(PocketItemService itemService, PocketService pocketService, BervanViewConfig bervanViewConfig) {
-        super(new PocketAppPageLayout(ROUTE_NAME), itemService, bervanViewConfig, PocketItem .class);
+        super(new PocketAppPageLayout(ROUTE_NAME), itemService, bervanViewConfig, PocketItem.class);
         this.pocketService = pocketService;
         this.itemService = itemService;
 
@@ -32,9 +34,11 @@ public abstract class AbstractAllPocketItemsView extends AbstractBervanTableView
         Set<String> pocketsName = pocketService.load(Pageable.ofSize(10000))
                 .stream().map(Pocket::getName).collect(Collectors.toSet());
         pocketSelector = new ComboBox<>("Pockets", pocketsName);
-        pocketSelector.addValueChangeListener(comboBoxStringComponentValueChangeEvent -> {
-            UI.getCurrent().navigate(ROUTE_NAME, QueryParameters.of("pocket-name", comboBoxStringComponentValueChangeEvent.getValue()));
-            this.loadData();
+        pocketSelector.addValueChangeListener(event -> {
+            if (!event.isFromClient()) return;
+            String selected = event.getValue();
+            pocketName = selected != null ? selected : "";
+            UI.getCurrent().navigate(ROUTE_NAME, QueryParameters.of("pocket-name", pocketName));
             this.refreshData();
         });
 
@@ -52,32 +56,40 @@ public abstract class AbstractAllPocketItemsView extends AbstractBervanTableView
 
     @Override
     protected List<PocketItem> loadData() {
-        getUI().ifPresent(ui -> {
-            QueryParameters queryParameters = ui.getInternals().getActiveViewLocation().getQueryParameters();
-            Map<String, String> parameters = queryParameters.getParameters()
-                    .entrySet()
-                    .stream()
-                    .collect(
-                            java.util.stream.Collectors.toMap(
-                                    Map.Entry::getKey,
-                                    e -> String.join("", e.getValue())
-                            )
-                    );
-            pocketName = parameters.getOrDefault("pocket-name", "");
-        });
+        try {
+            getUI().ifPresent(ui -> {
+                QueryParameters queryParameters = ui.getInternals().getActiveViewLocation().getQueryParameters();
+                Map<String, String> parameters = queryParameters.getParameters()
+                        .entrySet()
+                        .stream()
+                        .collect(
+                                java.util.stream.Collectors.toMap(
+                                        Map.Entry::getKey,
+                                        e -> String.join("", e.getValue())
+                                )
+                        );
+                String urlPocketName = parameters.getOrDefault("pocket-name", "");
+                if (!urlPocketName.isEmpty()) {
+                    pocketName = urlPocketName;
+                }
+            });
 
-        if (pocketName == null || pocketName.isEmpty()) {
-            newItemButton.setVisible(false);
-            return new ArrayList<>();
+            if (pocketName == null || pocketName.isEmpty()) {
+                getUI().ifPresent(ui -> ui.access(() -> newItemButton.setVisible(false)));
+                return new ArrayList<>();
+            }
+
+            String currentPocketName = pocketName;
+            getUI().ifPresent(ui -> ui.access(() -> {
+                newItemButton.setVisible(true);
+                pocketSelector.setValue(currentPocketName);
+            }));
+
+            return itemService.loadByPocketName(pocketName).stream().toList();
+        } catch (Exception e) {
+            logger.error("Failed to load pocket data!", e);
+            throw e;
         }
-
-        newItemButton.setVisible(true);
-
-        pocketSelector.setEnabled(false);
-        pocketSelector.setValue(pocketName);
-        pocketSelector.setEnabled(true);
-
-        return itemService.loadByPocketName(pocketName).stream().toList();
     }
 
     @Override
