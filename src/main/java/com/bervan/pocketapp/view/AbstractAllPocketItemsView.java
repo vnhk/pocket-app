@@ -98,6 +98,9 @@ public abstract class AbstractAllPocketItemsView extends AbstractBervanTableView
         int size = pocket.getPocketItems().size();
         newItem.setPocket(pocket);
         newItem.setOrderInPocket(size);
+        if (newItem.getContent() == null) {
+            newItem.setContent("");
+        }
         return super.preSaveActions(newItem);
     }
 }
