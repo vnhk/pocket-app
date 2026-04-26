@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.UUID;
 
+@Deprecated
 public abstract class AbstractPocketView extends AbstractBervanTableView<UUID, Pocket> {
     public static final String ROUTE_NAME = "pocket-app/pockets";
     private final PocketService service;

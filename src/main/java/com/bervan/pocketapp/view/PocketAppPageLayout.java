@@ -3,6 +3,7 @@ package com.bervan.pocketapp.view;
 import com.bervan.common.MenuNavigationComponent;
 import com.vaadin.flow.component.icon.VaadinIcon;
 
+@Deprecated
 public final class PocketAppPageLayout extends MenuNavigationComponent {
 
     public PocketAppPageLayout(String currentRouteName) {

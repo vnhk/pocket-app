@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Deprecated
 public abstract class AbstractAllPocketItemsView extends AbstractBervanTableView<UUID, PocketItem> {
     public static final String ROUTE_NAME = "pocket-app/all-pocket-items";
     private static JsonLogger logger = JsonLogger.getLogger(AbstractAllPocketItemsView.class, "pocket");
