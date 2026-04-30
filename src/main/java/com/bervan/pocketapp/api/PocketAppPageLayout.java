@@ -1,4 +1,4 @@
-package com.bervan.pocketapp.view;
+package com.bervan.pocketapp.api;
 
 import com.bervan.common.MenuNavigationComponent;
 import com.vaadin.flow.component.icon.VaadinIcon;
