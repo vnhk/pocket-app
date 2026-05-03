@@ -3,7 +3,7 @@ package com.bervan.pocketapp.pocketitem.api;
 
 import com.bervan.core.model.BaseDTO;
 import com.bervan.core.model.BaseModel;
-import com.bervan.core.model.FieldCustomMapper;
+import com.bervan.core.model.FieldMapperConfig;
 import com.bervan.pocketapp.pocketitem.PocketItem;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,7 +21,7 @@ public final class PocketItemCreateRequest implements BaseDTO<UUID> {
     private String content;
     private Boolean encrypted;
     private Integer orderInPocket;
-    @FieldCustomMapper(mapper = ToPocketMapper.class, targetFieldName = "pocket")
+    @FieldMapperConfig(mapper = ToPocketMapper.class, targetFieldNames = "pocket")
     private String pocketName;
 
     @Override
