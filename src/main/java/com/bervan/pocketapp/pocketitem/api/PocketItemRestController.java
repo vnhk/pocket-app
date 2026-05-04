@@ -59,7 +59,7 @@ public class PocketItemRestController extends BaseOwnedController {
             return ResponseEntity.badRequest().build();
         }
 
-        return super.create(req);
+        return super.create(req, PocketItemDto.class);
     }
 
     @PutMapping("/{id}")
