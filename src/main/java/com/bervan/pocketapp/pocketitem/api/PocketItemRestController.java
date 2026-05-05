@@ -5,7 +5,6 @@ import com.bervan.common.controller.BaseOwnedController;
 import com.bervan.common.mapper.BervanDTOMapper;
 import com.bervan.common.search.SearchRequest;
 import com.bervan.common.search.model.SearchOperation;
-import com.bervan.common.service.AuthService;
 import com.bervan.pocketapp.pocketitem.PocketItem;
 import com.bervan.pocketapp.pocketitem.PocketItemService;
 import org.springframework.data.domain.Page;
@@ -32,9 +31,6 @@ public class PocketItemRestController extends BaseOwnedController {
             @RequestParam(defaultValue = "orderInPocket") String sort,
             @RequestParam(defaultValue = "asc") String direction
     ) {
-        if (AuthService.getLoggedUserId() == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
         SearchRequest searchRequest = new SearchRequest();
         searchRequest.addCriterion("POCKET_NAME", PocketItem.class, "pocket.name", SearchOperation.EQUALS_OPERATION, pocketName);
 
@@ -43,17 +39,11 @@ public class PocketItemRestController extends BaseOwnedController {
 
     @GetMapping("/{id}")
     public ResponseEntity<PocketItemDto> getById(@PathVariable UUID id) {
-        if (AuthService.getLoggedUserId() == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
         return super.getById(id, PocketItemDto.class);
     }
 
     @PostMapping
     public ResponseEntity<?> create(@RequestBody PocketItemCreateRequest req) {
-        if (AuthService.getLoggedUserId() == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
 
         if (req.getPocketName() == null) {
             return ResponseEntity.badRequest().build();
@@ -64,27 +54,18 @@ public class PocketItemRestController extends BaseOwnedController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable UUID id, @RequestBody PocketItemDto req) {
-        if (AuthService.getLoggedUserId() == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
 
         return super.update(req);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
-        if (AuthService.getLoggedUserId() == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
 
         return super.delete(id);
     }
 
     @PostMapping("/{id}/decrypt")
     public ResponseEntity<DecryptResponse> decrypt(@PathVariable UUID id, @RequestBody DecryptRequest req) {
-        if (AuthService.getLoggedUserId() == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
         Optional<PocketItem> match = service.loadById(id);
         if (match.isEmpty()) return ResponseEntity.notFound().build();
         PocketItem item = match.get();
