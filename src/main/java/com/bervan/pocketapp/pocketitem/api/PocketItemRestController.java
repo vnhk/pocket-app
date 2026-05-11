@@ -92,8 +92,8 @@ public class PocketItemRestController extends BaseOwnedController {
     }
 
     @GetMapping("/export")
-    public ResponseEntity<byte[]> export() {
-        return super.exportAll(PocketItemDto.class, "pocket-items");
+    public ResponseEntity<byte[]> export(@RequestParam MultiValueMap<String, String> allParams) {
+        return super.exportAll(allParams, PocketItemDto.class, "pocket-items", PocketItem.class);
     }
 
     @PostMapping(value = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
