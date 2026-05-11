@@ -10,6 +10,7 @@ import com.bervan.pocketapp.pocketitem.PocketItemService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -25,16 +26,17 @@ public class PocketItemRestController extends BaseOwnedController {
 
     @GetMapping
     public ResponseEntity<Page<PocketItemDto>> listByPocket(
+            @RequestParam MultiValueMap<String, String> allParams,
             @RequestParam("pocket-name") String pocketName,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
             @RequestParam(defaultValue = "orderInPocket") String sort,
             @RequestParam(defaultValue = "asc") String direction
     ) {
-        SearchRequest searchRequest = new SearchRequest();
-        searchRequest.addCriterion("POCKET_NAME", PocketItem.class, "pocket.name", SearchOperation.EQUALS_OPERATION, pocketName);
-
-        return super.load(searchRequest, page, size, PocketItemDto.class);
+        SearchRequest baseRequest = new SearchRequest();
+        baseRequest.addCriterion("POCKET_NAME", com.bervan.pocketapp.pocketitem.PocketItem.class,
+                "pocket.name", SearchOperation.EQUALS_OPERATION, pocketName);
+        return super.search(baseRequest, allParams, page, size, PocketItemDto.class, com.bervan.pocketapp.pocketitem.PocketItem.class);
     }
 
     @GetMapping("/{id}")
