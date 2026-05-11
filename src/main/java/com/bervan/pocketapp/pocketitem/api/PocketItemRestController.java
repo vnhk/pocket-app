@@ -2,6 +2,7 @@ package com.bervan.pocketapp.pocketitem.api;
 
 import com.bervan.common.config.EntityConfigValidator;
 import com.bervan.common.controller.BaseOwnedController;
+import com.bervan.common.controller.BaseOwnedController.ImportResult;
 import com.bervan.common.mapper.BervanDTOMapper;
 import com.bervan.common.search.SearchRequest;
 import com.bervan.common.search.model.SearchOperation;
@@ -9,9 +10,11 @@ import com.bervan.pocketapp.pocketitem.PocketItem;
 import com.bervan.pocketapp.pocketitem.PocketItemService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -86,5 +89,15 @@ public class PocketItemRestController extends BaseOwnedController {
     }
 
     record DecryptResponse(String content) {
+    }
+
+    @GetMapping("/export")
+    public ResponseEntity<byte[]> export() {
+        return super.exportAll(PocketItemDto.class, "pocket-items");
+    }
+
+    @PostMapping(value = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ImportResult> importData(@RequestParam("file") MultipartFile file) {
+        return super.importAll(file, PocketItemDto.class);
     }
 }
